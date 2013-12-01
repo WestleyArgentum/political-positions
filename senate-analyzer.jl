@@ -42,3 +42,16 @@ for i in 1:num_bills
     end
 end
 
+
+# build senator_table
+global senator_table = DataFrame()
+
+for (name, votes) in vote_table
+    party_state = match(r"\(.*\)", name)
+    party_state == nothing && error("failed to parse party and state from senator: $name")
+
+    (party, state) = split(party_state.match[2:(end-1)], "-")
+    push!(senator_table, name, [party, state])
+end
+
+
