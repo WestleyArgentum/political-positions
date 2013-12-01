@@ -1,4 +1,4 @@
-setwd("~/vikparuchuri/political-positions")
+setwd("~/code/political-positions")
 
 is_installed <- function(mypkg) is.element(mypkg, installed.packages()[,1])
 
