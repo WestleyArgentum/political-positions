@@ -3,6 +3,9 @@ using JSON
 using DataFrames
 
 
+sanitize_senator_name(str) = chop(strip(str))
+
+
 # get the raw data for the 213th congress
 global senate_raw = JSON.parse(readall("data/senate.json"))
 
@@ -21,6 +24,8 @@ global vote_table = DataFrame()
 
 for i in 1:num_bills
     for (name, vote) in senate_raw[i]["data"]
+        name = sanitize_senator_name(name)
+
         if !haskey(vote_table, name)
             vote_data = Array(Any, num_bills)
             fill!(vote_data, NA)
