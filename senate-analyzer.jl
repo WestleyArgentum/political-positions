@@ -15,25 +15,17 @@ end
 sort!(raw_senate_json; lt = (lhs, rhs)->(lhs["number"] < rhs["number"]))
 
 
-# find list of senator names
-senators = Set()
-
-for i in 1:length(raw_senate_json)
-    for (name, vote) in raw_senate_json[i]["data"]
-        push!(senators, name)
-    end
-end
-
-
 # build the vote_table
 vote_table = DataFrame()
 
-for senator in senators
-    push!(vote_table, senator, fill(-1, length(raw_senate_json)))
-end
-
 for i in 1:length(raw_senate_json)
     for (name, vote) in raw_senate_json[i]["data"]
+        if !haskey(vote_table, name)
+            vote_data = Array(Any, length(raw_senate_json))
+            fill!(vote_data, NA)
+            vote_table[name] = vote_data
+        end
+
         if vote == "Yea"
             vote_table[name][i] = 1
         elseif vote == "Nay"
